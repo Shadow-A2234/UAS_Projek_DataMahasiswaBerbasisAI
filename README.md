@@ -1,4 +1,3 @@
-Tentu! Berikut ini adalah template `README.md` **yang profesional dan jelas** untuk proyek kamu:
 🧠 **UAS\_Projek\_DataMahasiswaBerbasisAI**, lengkap dengan:
 
 * Deskripsi
@@ -9,8 +8,6 @@ Tentu! Berikut ini adalah template `README.md` **yang profesional dan jelas** un
 
 ---
 
-## ✅ Template `README.md` untuk Proyek Kamu:
-
 ```markdown
 # UAS_Projek_DataMahasiswaBerbasisAI 🎓🤖
 
@@ -18,7 +15,7 @@ Proyek ini adalah aplikasi berbasis Python dan AI yang dapat digunakan untuk **m
 
 ---
 
-## 📦 Fitur
+📦 Fitur
 
 - ✅ Manajemen data mahasiswa (input, lihat, update, delete)
 - ✅ Chatbot dengan API GPT (OpenRouter/OpenAI)
@@ -26,45 +23,25 @@ Proyek ini adalah aplikasi berbasis Python dan AI yang dapat digunakan untuk **m
 - ✅ Fitur ekspor ke file `.json`
 - ✅ Tampilan antarmuka sederhana berbasis CLI atau GUI (opsional)
 
----
-
-## 🛠️ Struktur Folder
-
-```
-
-UAS\_Projek\_DataMahasiswaBerbasisAI/
-├── ai\_module/
-│   ├── chatbot.py
-│   ├── verifikasi.py
-├── database/
-│   ├── mahasiswa.db
-├── main.py
-├── app.py
-├── requirements.txt
-├── README.md
-└── ...
-
 ````
 
----
-
-## ⚙️ Setup Environment (Wajib)
+⚙️ Setup Environment (Wajib)
 
 > 💡 Disarankan menggunakan Python 3.10+ dan virtual environment
 
-### 1. Clone Repository
+1. Clone Repository
 ```bash
 git clone https://github.com/Shadow-A2234/UAS_Projek_DataMahasiswaBerbasisAI.git
 cd UAS_Projek_DataMahasiswaBerbasisAI
 ````
 
-### 2. Buat Virtual Environment
+2. Buat Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-### 3. Aktifkan Virtual Environment
+3. Aktifkan Virtual Environment
 
 **Windows**
 
@@ -78,7 +55,7 @@ venv\Scripts\activate
 source venv/bin/activate
 ```
 
-### 4. Install Dependencies
+4. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -86,7 +63,7 @@ pip install -r requirements.txt
 
 ---
 
-## 📚 Daftar Library yang Digunakan
+📚 Daftar Library yang Digunakan
 
 | Library             | Fungsi                                   |
 | ------------------- | ---------------------------------------- |
@@ -102,7 +79,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Menjalankan Aplikasi
+🚀 Menjalankan Aplikasi
 
 ```bash
 python app.py
@@ -116,21 +93,28 @@ python main.py
 
 ---
 
-## ✍️ Kontributor
+✍️ Kontributor
 
-* **Muhammad Abdi** (Ketua Proyek)
-* \[Tambahkan nama tim kamu di sini]
+* **Muhammad Abdi**
+*
+*
+*
+*
 
 ---
 
-## 📄 Lisensi
+📄 Lisensi
 
 Proyek ini dibuat untuk keperluan Tugas Akhir/UAS. Gunakan dengan bijak. Tidak untuk diperjualbelikan.
 
 ---
 
-## 🧠 Catatan Tambahan
+🧠 Catatan Tambahan
+Jika mengalami error module tidak ditemukan (ModuleNotFoundError), pastikan:
 
+Virtual environment aktif
+
+pip install -r requirements.txt sudah dijalankan
 Jika mengalami error module tidak ditemukan (`ModuleNotFoundError`), pastikan:
 
 * Virtual environment aktif
