@@ -1,26 +1,142 @@
 <!DOCTYPE html>
-<html>
+<html lang="id" data-theme="light">
 <head>
-  <title>Riwayat Chat</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Riwayat Chat – Elegan dengan Background Tekstur</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #f0f2f5;
+      --bg-texture-light: url('https://www.toptal.com/designers/subtlepatterns/concrete-wall.png');
+      --bg-texture-dark: url('https://www.toptal.com/designers/subtlepatterns/double-bubble-dark.png');
+      --text-main: #333;
+      --bubble-user: #4e8cff;
+      --bubble-bot: #e5e5ea;
+      --surface: #ffffff;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] {
+      --bg-main: #181a1f;
+      --text-main: #e2e2e6;
+      --bubble-user: #3b6ef6;
+      --bubble-bot: #2f3033;
+      --surface: #202225;
+      --shadow: none;
+    }
+    body {
+      background-color: var(--bg-main);
+      background-image: var(--bg-texture-light);
+      background-repeat: repeat;
+      color: var(--text-main);
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      margin: 0;
+      padding: 2rem 1rem;
+      transition: background 0.3s;
+    }
+    [data-theme="dark"] body {
+      background-image: var(--bg-texture-dark);
+    }
+    .container {
+      max-width: 720px;
+      margin: auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+    .chat-session {
+      margin-bottom: 2rem;
+    }
+    .session-time {
+      text-align: center;
+      font-size: .85rem;
+      opacity: .7;
+      margin-bottom: 1rem;
+    }
+    .chat-body {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .chat-bubble {
+      max-width: 70%;
+      padding: .8rem 1.2rem;
+      border-radius: 1rem;
+      position: relative;
+      line-height: 1.4;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      transition: background .3s, color .3s;
+    }
+    .chat-bubble.user {
+      background: var(--bubble-user);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: .2rem;
+    }
+    .chat-bubble.bot {
+      background: var(--bubble-bot);
+      align-self: flex-start;
+      border-bottom-left-radius: .2rem;
+    }
+    .chat-bubble .msg-time {
+      display: block;
+      text-align: right;
+      font-size: .7rem;
+      margin-top: .4rem;
+      opacity: .6;
+    }
+  </style>
 </head>
-<body class="container mt-4">
-  <h3>Riwayat Chat untuk {{ user.nama }}</h3>
-  <a href="/chat_page" class="btn btn-secondary mb-3">Kembali ke Chat</a>
+<body>
+  <div class="container">
+    <header>
+      <h3>Riwayat Chat untuk {{ user.nama }}</h3>
+      <button id="theme-toggle" class="toggle-btn" aria-label="Toggle theme">🌙</button>
+    </header>
+    <a href="/chat_page" class="btn btn-outline-secondary mb-3">← Kembali ke Chat</a>
 
-  {% for messages, waktu in riwayat %}
-    <div class="card mb-3">
-      <div class="card-header">
-        <strong>Waktu:</strong> {{ waktu }}
+    {% for messages, waktu in riwayat %}
+      <div class="chat-session">
+        <div class="session-time">{{ waktu }}</div>
+        <div class="chat-body">
+          {% for msg in messages %}
+            <div class="chat-bubble {{ msg.role }}">
+              <div class="content">{{ msg.content }}</div>
+              <span class="msg-time">{{ waktu }}</span>
+            </div>
+          {% endfor %}
+        </div>
       </div>
-      <div class="card-body">
-        {% for msg in messages %}
-          <p><strong>{{ msg.role }}:</strong> {{ msg.content }}</p>
-        {% endfor %}
-      </div>
-    </div>
-  {% else %}
-    <p>Tidak ada riwayat ditemukan.</p>
-  {% endfor %}
+    {% else %}
+      <p class="text-center">Tidak ada riwayat ditemukan.</p>
+    {% endfor %}
+  </div>
+
+  <script>
+    const html = document.documentElement;
+    const btn = document.getElementById('theme-toggle');
+    let mode = localStorage.getItem('theme')
+      || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    html.setAttribute('data-theme', mode);
+    btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+
+    btn.addEventListener('click', () => {
+      mode = (mode === 'dark' ? 'light' : 'dark');
+      html.setAttribute('data-theme', mode);
+      localStorage.setItem('theme', mode);
+      btn.textContent = mode === 'dark' ? '☀️' : '🌙';
+    });
+  </script>
 </body>
 </html>

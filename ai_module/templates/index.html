@@ -1,40 +1,223 @@
 <!DOCTYPE html>
-<html>
+<html lang="id" data-theme="light">
 <head>
-  <title>Chatbot Mahasiswa</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script>
-    async function sendMessage() {
-      const messageInput = document.getElementById("message");
-      const message = messageInput.value;
-      const chatBox = document.getElementById("chatBox");
-
-      if (!message) return;
-      chatBox.innerHTML += `<div><b>Anda:</b> ${message}</div>`;
-      messageInput.value = "";
-
-      const response = await fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-      });
-
-      const data = await response.json();
-      chatBox.innerHTML += `<div><b>Bot:</b> ${data.reply}</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Chatbot – Mode Krim & Balanced Night Mode</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-light: #f5f0e6; /* krim lembut */
+      --bg-dark: #2e2e2e;
+      --text-light: #2c3e50;
+      --text-dark: #d1d5db;
+      --bubble-user: #0e68d5;
+      --bubble-bot-light: #fffaf0; /* putih krim */
+      --bubble-bot-dark: #444;
+      --accent: #d9534f;
     }
-  </script>
-</head>
-<body class="container mt-4">
-  <h3>Selamat Datang, {{ user.nama }}</h3>
-  <div id="chatBox" style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;"></div>
+    [data-theme="light"] {
+      --bg: var(--bg-light);
+      --text: var(--text-light);
+      --bubble-bot-bg: var(--bubble-bot-light);
+    }
+    [data-theme="dark"] {
+      --bg: var(--bg-dark);
+      --text: var(--text-dark);
+      --bubble-bot-bg: var(--bubble-bot-dark);
+    }
 
-  <div class="input-group mb-3">
-    <input type="text" id="message" class="form-control" placeholder="Ketik pesan...">
-    <button class="btn btn-primary" onclick="sendMessage()">Kirim</button>
+    body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      transition: background .3s, color .3s;
+    }
+    .button-group {
+      position: fixed; top: 1rem; right: 1rem;
+      display: flex; gap: .5rem; z-index: 10;
+    }
+    .button-group button {
+      background: none; border: none;
+      cursor: pointer; font-size: 1.2rem;
+      padding: .4rem .6rem;
+      color: var(--text);
+    }
+    .logout-button {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      border-radius: 4px;
+      font-size: .9rem;
+      padding: .4rem .8rem;
+      transition: background .2s, color .2s;
+    }
+    .logout-button:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding-top: 3.5rem;
+    }
+    .chat-box {
+      flex: 1; overflow-y: auto;
+      padding: 1rem; display: flex;
+      flex-direction: column; gap: 1rem;
+      backdrop-filter: blur(6px);
+    }
+    .chat-entry { display: flex; }
+    .chat-entry.user { justify-content: flex-end; }
+    .chat-entry.bot { justify-content: flex-start; }
+    .bubble {
+      max-width: 75%; padding: .75rem 1rem;
+      border-radius: 1rem; line-height: 1.5;
+      font-size: .97rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      white-space: pre-wrap; word-break: break-word;
+      background: var(--bubble-bot-bg);
+      color: var(--text);
+    }
+    .bubble.user {
+      background: var(--bubble-user);
+      color: #fff;
+    }
+    .input-box {
+      display: flex; gap: .5rem;
+      padding: 1rem; backdrop-filter: blur(6px);
+    }
+    .input-box input {
+      flex: 1; padding: .75rem 1rem;
+      border-radius: 999px; border: 1px solid #aaa;
+      outline: none; font-size: 1rem;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .input-box button {
+      background: var(--accent); border: none;
+      border-radius: 999px; color: #fff;
+      padding: .75rem 1rem; cursor: pointer;
+    }
+    #historyModal .modal-content {
+      backdrop-filter: none !important;
+      background: var(--bg);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="button-group">
+      <a href="/riwayat" class="btn btn-outline-info btn-sm" role="button" title="Riwayat">🗂️ Lihat Riwayat</a>
+      <a href="/logout" class="btn btn-outline-danger btn-sm" role="button">Logout</a>
+      <button id="theme-toggle" title="Toggle tema">🌓</button>
   </div>
 
-  <a href="/riwayat" class="btn btn-info">Lihat Riwayat</a>
-  <a href="/logout" class="btn btn-danger">Logout</a>
+  <div class="container">
+    <div id="chatBox" class="chat-box"></div>
+    <div class="input-box">
+      <input id="message" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter') sendMessage()" />
+      <button onclick="sendMessage()">Kirim</button>
+    </div>
+  </div>
+
+  <div class="modal fade" id="historyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Riwayat Chat</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="historyBody"></div>
+    </div></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('theme-toggle');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const historyBtn = document.getElementById('historyBtn');
+
+    let theme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', theme);
+    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    themeBtn.onclick = () => {
+      theme = theme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    };
+
+    let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+    function loadHistory() {
+      chatHistory.forEach(h => append(h.who, h.text));
+    }
+    function saveHistory(who, text) {
+      chatHistory.push({who, text});
+      localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+    }
+
+    logoutBtn.onclick = () => {
+      localStorage.removeItem('chatHistory');
+      location.reload();
+    };
+
+    historyBtn.onclick = () => {
+      const body = document.getElementById('historyBody');
+      if (chatHistory.length === 0) {
+        body.innerHTML = '<em>Tidak ada riwayat.</em>';
+      } else {
+        body.innerHTML = chatHistory.map(h =>
+          `<div><strong>${h.who === 'user' ? 'Anda' : 'Bot'}:</strong> ${h.text}</div>`
+        ).join('<hr>');
+      }
+      new bootstrap.Modal(document.getElementById('historyModal')).show();
+    };
+
+    async function sendMessage() {
+      const inp = document.getElementById('message');
+      const text = inp.value.trim();
+      if (!text) return;
+      append('user', text); saveHistory('user', text);
+      inp.value = '';
+      append('bot', 'Menelusuri web…');
+      try {
+        const res = await fetch('/chat', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({message:text})
+        });
+        const { reply } = await res.json();
+        replaceLast(reply); saveHistory('bot', reply);
+      } catch {
+        const err = 'Terjadi kesalahan.';
+        replaceLast(err); saveHistory('bot', err);
+      }
+    }
+
+    function append(who, text) {
+      const box = document.getElementById('chatBox');
+      const el = document.createElement('div');
+      el.className = 'chat-entry ' + (who === 'user' ? 'user' : 'bot');
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble ' + (who === 'user' ? 'user' : 'bot');
+      bubble.textContent = text;
+      el.appendChild(bubble);
+      box.appendChild(el);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function replaceLast(text) {
+      const bots = document.querySelectorAll('.bubble.bot');
+      const last = bots[bots.length - 1];
+      last.textContent = text;
+      const box = document.getElementById('chatBox');
+      box.scrollTop = box.scrollHeight;
+    }
+
+    window.addEventListener('load', loadHistory);
+  </script>
 </body>
 </html>
