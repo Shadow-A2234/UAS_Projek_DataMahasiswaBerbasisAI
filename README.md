@@ -105,9 +105,10 @@ python main.py
 
 * NAMA : admin
 * NIM : admin123
-*
-*
-*
+
+  CONTOH NAMA DAN NIM MAHASISWA YANG SUDAH ADA DI DATABASE NYA
+* NAMA : MUHAMMAD ABDI
+* NIM : 24302057
 *
 
 ---
