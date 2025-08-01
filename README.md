@@ -101,9 +101,10 @@ python main.py
 
 ---
 
-✍️ Kontributor
+✍️ LOGIN ADMIN UNTUK MENAMBAHKAN MAHASISWA
 
-* **Muhammad Abdi**
+* NAMA : admin
+* NIM : admin123
 *
 *
 *
