@@ -1,4 +1,12 @@
-🧠 **UAS\_Projek\_DataMahasiswaBerbasisAI**, lengkap dengan:
+**NAMA NAMA KELOMPOK**
+- Muhammad Abdi 24302057
+- Siti Nor'Hafipah 24302019
+- Rabiatul Munawarah 24302020
+- Muhammad Amin 24302012
+- 
+
+
+🧠 **UAS ProjeK Data Mahasiswa Berbasis CHATBOT AI**, lengkap dengan:
 
 * Deskripsi
 * Cara menjalankan
