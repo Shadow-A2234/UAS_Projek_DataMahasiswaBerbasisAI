@@ -3,7 +3,7 @@
 - Siti Nor'Hafipah 24302019
 - Rabiatul Munawarah 24302020
 - Muhammad Amin 24302012
-- 
+- Muhammad Amin Badali 24302015
 
 
 🧠 **UAS ProjeK Data Mahasiswa Berbasis CHATBOT AI**, lengkap dengan:
