@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = "rahasia123"
 
 # ------------------ OpenRouter ------------------ #
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "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"
 HEADERS = {
     "Authorization": f"Bearer {OPENROUTER_API_KEY}",
     "Content-Type": "application/json",
